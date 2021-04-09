@@ -1,5 +1,5 @@
 
-## React stopwatch
+## React stopwatch :stopwatch:
 
 This project was created by using React Hooks and plain CSS for styling.
 
