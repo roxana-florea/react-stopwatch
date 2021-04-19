@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import './App.css'
+import React, { useState, useEffect, useRef } from 'react';
+import './App.css';
 import Timer from './components/Timer';
 import List from './components/List';
 
@@ -8,11 +8,10 @@ const App = () => {
   const [time, setTime] = useState(0);
   const [timerOn, setTimerOn] = useState(false);
   const [laps, setLaps] = useState([]);
-  let centiseconds = ("0" + ((time / 10) % 100)).slice(-2);
-  let seconds = ("0" + Math.floor((time / 1000) % 60)).slice(-2);
-  let minutes = ("0" + Math.floor((time / 60000) % 60)).slice(-2);
-  let hours = ("0" + Math.floor(time / 3600000)).slice(-2);
-
+  let centiseconds = ('0' + ((time / 10) % 100)).slice(-2);
+  let seconds = ('0' + Math.floor((time / 1000) % 60)).slice(-2);
+  let minutes = ('0' + Math.floor((time / 60000) % 60)).slice(-2);
+  let hours = ('0' + Math.floor(time / 3600000)).slice(-2);
 
   useEffect(() => {
     let interval = 0;
@@ -26,50 +25,52 @@ const App = () => {
     return () => clearInterval(interval);
   }, [timerOn]);
 
+  const recordLap = () => {
+    let captureTime = `${hours} : ${minutes} : ${seconds} : ${centiseconds}`;
 
-  const recordLap = () =>{
-     let captureTime = `${hours} : ${minutes} : ${seconds} : ${centiseconds}`;
-    
-     setLaps([...laps, captureTime]);
-    
-  }
+    setLaps([...laps, captureTime]);
+  };
 
-  const resetEverything = () =>{
+  const resetEverything = () => {
     setTime(0);
     setLaps([]);
-  }
+  };
 
-// saving the lap list in local storage
-  useEffect(()=>{
-   if(firstrender.current) {
-     firstrender.current = false;
-   }else {
-  localStorage.setItem('Laps', JSON.stringify([...laps]));
-   }
-  },[laps])
+  // saving the lap list in local storage
 
   useEffect(() => {
-    if(localStorage.getItem('Laps') !== null){
-      const newLaps = localStorage.getItem('Laps');
-      setLaps(l=>JSON.parse([...l,newLaps]));
+    if (firstrender.current) {
+      firstrender.current = false;
+    } else {
+      localStorage.setItem('Laps', JSON.stringify([...laps]));
     }
-   
-  },[])
+  }, [laps]);
+
+
+  useEffect(() => {
+    if (localStorage.getItem('Laps') !== null) {
+      const newLaps = localStorage.getItem('Laps');
+      setLaps((l) => JSON.parse([...l, newLaps]));
+    }
+  }, []);
+
+
+
 
   return (
     <div className="App">
-      <Timer 
-      time={time}
-      setTimerOn={setTimerOn}
-      timerOn={timerOn}
-      centiseconds={centiseconds}
-      seconds={seconds}
-      minutes={minutes}
-      hours={hours}
-      lap={recordLap}
-      reset={resetEverything}
+      <Timer
+        time={time}
+        setTimerOn={setTimerOn}
+        timerOn={timerOn}
+        centiseconds={centiseconds}
+        seconds={seconds}
+        minutes={minutes}
+        hours={hours}
+        lap={recordLap}
+        reset={resetEverything}
       />
-      <List laps={laps}/>
+      <List laps={laps} />
     </div>
   );
 };
